@@ -211,19 +211,27 @@ const Controller = {
 
   category: async (req, res) => {
     try {
-      const response = await services.fetchService(`${baseUrl}/resep/`, res);
+      const response = await services.fetchService(`${baseUrl}`, res);
       const $ = cheerio.load(response.data);
-      const element = $(".dropdown-menu");
+      const element = $("._categories-list ul.list-unstyled");
       let category, key;
       let category_list = [];
+     
 
       element.find("li").each((i, e) => {
         category = $(e).find("a").text().trim();
-        key = $(e).find("a").attr("href").split("/")[4];
-        console.log(category);
+        key = $(e).find("a").attr("href").split("/")[4]
+        let img = $(e).find("noscript")
+        .text()
+        .match(/src="([^"]+)"/g)
+        .toString()
+        .replace('src="', "")
+        .replace('"', "");
+        console.log(key);
         category_list.push({
           category,
           key,
+          img
         });
       });
 
