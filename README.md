@@ -9,7 +9,7 @@
 
 ### Endpoint Usage
 ---
-**Base Url** : `https://resepin.vercel.app`
+**Base Url** : `https://resepin-api.vercel.app`
 
 | Endpoint | Usage | Example |
 |----------|-------|---------|
