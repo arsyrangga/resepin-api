@@ -187,7 +187,7 @@ const Controller = {
   newRecipes: async (req, res) => {
     try {
       const response = await services.fetchService(
-        `${baseUrl}/resep-masakan/`,
+        `${baseUrl}/resep/`,
         res
       );
       return fetchRecipes(req, res, response);
@@ -285,7 +285,7 @@ const Controller = {
     try {
       const key = req.params.key;
       const response = await services.fetchService(
-        `${baseUrl}/resep-masakan/${key}`,
+        `${baseUrl}/resep/${key}`,
         res
       );
       return fetchRecipes(req, res, response);
