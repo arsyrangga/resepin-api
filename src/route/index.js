@@ -53,6 +53,9 @@ route.get('/api/recipe/:key', controller.recipesDetail);
 route.get('/api/search/', controller.searchRecipes);
 
 // done
+route.get('/api/search/page/:page', controller.searchRecipesByPage);
+
+// done
 route.get('/api/category/article', controller.articleCategory);
 
 // done 

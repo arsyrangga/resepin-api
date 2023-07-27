@@ -516,6 +516,53 @@ const Controller = {
     }
   },
 
+  searchRecipesByPage: async (req, res) => {
+    try {
+      const query = req.query.q;
+      params = req.params.page
+      console.log(query);
+      const response = await services.fetchService(
+        `${baseUrl}/page/${params}/?s=${query}`,
+        res
+      );
+      const $ = cheerio.load(response.data);
+      const element = $("._recipes-list");
+      let title, duration, difficulty, key, url, href;
+      let recipe_list = [];
+      element.find(".card").each((i, e) => {
+        title = $(e).find(".card-title").text().trim();
+        duration = $(e).find("a:not([data-tracking])").first().text().trim();
+        difficulty = $(e).find("a[data-tracking]").first().text().trim();
+        img = $(e)
+          .find("noscript")
+          .text()
+          .match(/src="([^"]+)"/g)
+          .toString()
+          .replace('src="', "")
+          .replace('"', "");
+        url = $(e).find(".card-title").find("a").attr("href");
+        href = url.split("/");
+        key = href[4];
+
+        recipe_list.push({
+          key,
+          title: title,
+          times: duration,
+          difficulty: difficulty,
+          img,
+        });
+      });
+      console.log("fetch new recipes");
+      res.send({
+        method: req.method,
+        status: true,
+        results: recipe_list,
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
+
   articleCategory: async (req, res) => {
     try {
       const response = await services.fetchService(baseUrl + "/artikel", res);

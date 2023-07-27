@@ -20,6 +20,7 @@
 | recipes category | `/api/category/recipes` | - |
 | recipe detail | `/api/recipe/:key` | - |
 | search recipes | `/api/search/?q=parameter` | `/api/search/?q=coto` |
+| search recipes Pages | `/api/search/page/:page/?q=parameter` | `/api/search/page/1?q=coto` |
 | article categorys | `/api/category/article` | - |
 | article by category | `/api/category/article/:key/:page` | `/api/category/article/makanan-gaya-hidup/1` |
 | article | `/api/articles/new` | - |
