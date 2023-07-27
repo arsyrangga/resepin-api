@@ -23,6 +23,7 @@
 | article categorys | `/api/category/article` | - |
 | article by category | `/api/category/article/:key/:page` | `/api/category/article/makanan-gaya-hidup/1` |
 | article | `/api/articles/new` | - |
+| article by page | `/api/articles/page/1` | - |
 | article detail | `/api/article/:tag/:key` | `/api/article/makanan-gaya-hidup/papeda-dan-masakan-indonesia-timur` |
 
 

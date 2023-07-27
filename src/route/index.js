@@ -37,6 +37,9 @@ route.get('/api/category/recipes', controller.category);
 // done
 route.get('/api/articles/new', controller.article);
 
+//done
+route.get('/api/articles/page/:page', controller.articlePage);
+
 // done
 route.get('/api/category/recipes/:key', controller.recipesByCategory);
 

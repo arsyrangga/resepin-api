@@ -245,6 +245,42 @@ const Controller = {
     }
   },
 
+  articlePage: async (req, res) => {
+    try {
+      const response = await services.fetchService(`${baseUrl}/artikel/page/` + req.params.page, res);
+      const $ = cheerio.load(response.data);
+      const element = $("._articles-list .row");
+      let title, url, parse, img;
+      let article_lists = [];
+      element.find(".card").each((i, e) => {
+        title = $(e).find(".card-title").text().trim();
+        img = $(e)
+          .find("noscript")
+          .text()
+          .match(/src="([^"]+)"/g)
+          .toString()
+          .replace('src="', "")
+          .replace('"', "");
+        url = $(e).find("a").attr("href");
+        parse = url.split("/");
+        article_lists.push({
+          img,
+          title: title,
+          key: parse[4],
+          // url: url,
+        });
+      });
+
+      return res.send({
+        method: req.method,
+        status: true,
+        results: article_lists,
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
+
   article: async (req, res) => {
     try {
       const response = await services.fetchService(`${baseUrl}/resep/`, res);
