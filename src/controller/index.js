@@ -186,10 +186,7 @@ const limiterRecipes = (req, res, response, limiter) => {
 const Controller = {
   newRecipes: async (req, res) => {
     try {
-      const response = await services.fetchService(
-        `${baseUrl}/resep/`,
-        res
-      );
+      const response = await services.fetchService(`${baseUrl}/resep/`, res);
       return fetchRecipes(req, res, response);
     } catch (error) {
       throw error;
@@ -216,22 +213,22 @@ const Controller = {
       const element = $("._categories-list ul.list-unstyled");
       let category, key;
       let category_list = [];
-     
 
       element.find("li").each((i, e) => {
         category = $(e).find("a").text().trim();
-        key = $(e).find("a").attr("href").split("/")[4]
-        let img = $(e).find("noscript")
-        .text()
-        .match(/src="([^"]+)"/g)
-        .toString()
-        .replace('src="', "")
-        .replace('"', "");
+        key = $(e).find("a").attr("href").split("/")[4];
+        let img = $(e)
+          .find("noscript")
+          .text()
+          .match(/src="([^"]+)"/g)
+          .toString()
+          .replace('src="', "")
+          .replace('"', "");
         console.log(key);
         category_list.push({
           category,
           key,
-          img
+          img,
         });
       });
 
@@ -247,7 +244,10 @@ const Controller = {
 
   articlePage: async (req, res) => {
     try {
-      const response = await services.fetchService(`${baseUrl}/artikel/page/` + req.params.page, res);
+      const response = await services.fetchService(
+        `${baseUrl}/artikel/page/` + req.params.page,
+        res
+      );
       const $ = cheerio.load(response.data);
       const element = $("._articles-list .row");
       let title, url, parse, img;
@@ -353,70 +353,36 @@ const Controller = {
       );
       const $ = cheerio.load(response.data);
       let metaDuration, metaServings, metaDificulty, metaIngredient;
-      let title,
-        thumb,
-        user,
-        datePublished,
-        desc,
-        quantity,
-        ingredient,
-        ingredients;
-      let parseDuration, parseServings, parseDificulty, parseIngredient;
-      let duration, servings, difficulty;
-      let servingsArr = [];
-      let difficultyArr = [];
+      let title, thumb, user, datePublished, desc, image, duration, difficulty;
       let object = {};
       let titleContent = $("._section-title h1");
       let descContent = $("._rich-content");
       object.title = titleContent.text().trim();
       object.description = descContent.text();
 
-      const elementHeader = $("#recipe-header");
+      const elementHeader = $("._recipe-header");
       const elementDesc = $(".the-content").first();
       const elementNeeded = $("._product-popup");
       const elementIngredients = $("._recipe-ingredients ");
       const elementTutorial = $("._recipe-steps");
       title = elementHeader.find(".title").text();
+      image = $("._recipe-header")
+        .find("noscript")
+        .text()
+        .match(/src="([^"]+)"/g)
+        .toString()
+        .replace('src="', "")
+        .replace('"', "");
+      object.image = image;
+      object.times = elementHeader.find("._recipe-features a:nth-child(1)").text().trim();
+      object.difficulty = elementHeader.find("._recipe-features a:nth-child(2)").text().trim();
+      console.log(image);
       thumb = elementHeader.find(".featured-img").attr("data-lazy-src");
       if (thumb === undefined) {
         thumb = null;
       }
       user = elementHeader.find("small.meta").find(".author").text();
       datePublished = elementHeader.find("small.meta").find(".date").text();
-
-      elementHeader.find(".recipe-info").each((i, e) => {
-        metaDuration = $(e).find(".time").find("small").text();
-        metaServings = $(e).find(".servings").find("small").text();
-        metaDificulty = $(e).find(".difficulty").find("small").text();
-        if (
-          metaDuration.includes("\n") &&
-          metaServings.includes("\n") &&
-          metaDificulty.includes("\n")
-        ) {
-          parseDuration = metaDuration.split("\n")[1].split(" ");
-          parseDuration.forEach((r) => {
-            if (r !== "") duration = r;
-          });
-
-          parseServings = metaServings.split("\n")[1].split(" ");
-          parseServings.forEach((r) => {
-            if (r !== "") servingsArr.push(r);
-          });
-          servings = Array.from(servingsArr).join(" ");
-          parseDificulty = metaDificulty.split("\n")[1].split(" ");
-          parseDificulty.forEach((r) => {
-            if (r !== "") difficultyArr.push(r);
-          });
-          difficulty = Array.from(difficultyArr).join(" ");
-        }
-
-        object.title = title;
-        object.thumb = thumb;
-        object.servings = servings;
-        object.times = duration;
-        object.difficulty = difficulty;
-        object.author = { user, datePublished };
-      });
 
       elementDesc.each((i, e) => {
         desc = $(e).find("p").text();
@@ -519,7 +485,7 @@ const Controller = {
   searchRecipesByPage: async (req, res) => {
     try {
       const query = req.query.q;
-      params = req.params.page
+      params = req.params.page;
       console.log(query);
       const response = await services.fetchService(
         `${baseUrl}/page/${params}/?s=${query}`,
@@ -650,13 +616,14 @@ const Controller = {
       author = element.find(".author").find("small").first().text().trim();
       published = element.find(".author").find("small").last().text().trim();
       img = element
-        .find("noscript").first()
+        .find("noscript")
+        .first()
         .text()
         .match(/src="([^"]+)"/g)
         .toString()
         .replace('src="', "")
         .replace('"', "");
-      description = element.find("._rich-content").text().trim()
+      description = element.find("._rich-content").text().trim();
 
       article_object.title = title;
       article_object.img = img;
