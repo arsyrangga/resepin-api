@@ -267,6 +267,7 @@ const Controller = {
           img,
           title: title,
           key: parse[4],
+          category : parse[3]
           // url: url,
         });
       });
@@ -303,6 +304,7 @@ const Controller = {
           img,
           title: title,
           key: parse[4],
+          category: parse[3],
           // url: url,
         });
       });
