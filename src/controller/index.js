@@ -366,13 +366,13 @@ const Controller = {
       const elementIngredients = $("._recipe-ingredients ");
       const elementTutorial = $("._recipe-steps");
       title = elementHeader.find(".title").text();
-      image = $("._recipe-header")
+      image = $("._recipe-header .recipe-image")
         .find("noscript")
         .text()
         .match(/src="([^"]+)"/g)
         .toString()
         .replace('src="', "")
-        .replace('"', "");
+        .replace('"', "").split(",")[0];
       object.image = image;
       object.times = elementHeader.find("._recipe-features a:nth-child(1)").text().trim();
       object.difficulty = elementHeader.find("._recipe-features a:nth-child(2)").text().trim();
